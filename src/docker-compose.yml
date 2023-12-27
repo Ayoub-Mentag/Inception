@@ -2,7 +2,8 @@ version: '3'
 
 services:
   nginx:
-    build: ./requirement/nginx
+    build: requirements/nginx
+    container_name: nginx
     ports:
       - "443:443"
     volumes:
@@ -11,12 +12,13 @@ services:
       - wordpress
     networks:
       - my-network
-    environment:
+    env_file:
       - .env
 
   wordpress:
-    build: ./requirement/wordpress
-    environment:
+    build: requirements/wordpress
+    container_name: wordpress
+    env_file:
       - .env
     volumes:
       - wp-volume:/var/www/html
@@ -26,8 +28,9 @@ services:
       - my-network
 
   mariadb:
-    build: ./requirement/mariadb
-    environment:
+    build: requirements/mariadb
+    container_name: mariadb
+    env_file:
       - .env
     volumes:  
       - db-volume:/var/lib/mysql/
@@ -35,8 +38,8 @@ services:
       - my-network
 
 volumes:
-  wordpress-data:
-  mariadb-data:
+  wp-volume:
+  db-volume:
 
 networks:
   my-network:
