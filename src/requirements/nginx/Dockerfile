@@ -2,7 +2,7 @@ FROM debian:bullseye
 
 COPY ./tools/script.sh /
 RUN ./script.sh
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 
 
 EXPOSE 443

@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  nginx:
+    build: ./requirement/nginx
+    ports:
+      - "443:443"
+    volumes:
+      - wp-volume:/var/www/html
+    depends_on:
+      - wordpress
+    networks:
+      - my-network
+    environment:
+      - .env
+
+  wordpress:
+    build: ./requirement/wordpress
+    environment:
+      - .env
+    volumes:
+      - wp-volume:/var/www/html
+    depends_on:
+      - mariadb
+    networks:
+      - my-network
+
+  mariadb:
+    build: ./requirement/mariadb
+    environment:
+      - .env
+    volumes:  
+      - db-volume:/var/lib/mysql/
+    networks:
+      - my-network
+
+volumes:
+  wordpress-data:
+  mariadb-data:
+
+networks:
+  my-network:

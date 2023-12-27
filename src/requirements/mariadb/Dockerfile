@@ -1,14 +1,9 @@
-FROM ubuntu:20.04
+FROM debian:buster
 
-RUN apt-get update
-RUN apt-get install -y mariadb-server
+RUN apt update && apt install mariadb-server -y
 
-EXPOSE 3306
+COPY ./conf/mariadb.conf /etc/mysql/mariadb.conf.d/
 
-LABEL version="1.0"
-LABEL description="MariaDB Server"
+COPY ./tools/script.sh /
 
-HEALTHCHECK --start-period=5m \
-  CMD mariadb -e 'SELECT @@datadir;' || exit 1
-
-CMD ["/bin/mariadb"]
+CMD ["/script.sh"]
