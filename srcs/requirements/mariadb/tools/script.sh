@@ -3,24 +3,22 @@
 # Start the MariaDB server
 mysqld_safe &
 
-# Wait for MariaDB to start (adjust the sleep duration based on your system)
-while ! mysqladmin ping --silent; do
+# Wait for MariaDB to start
+while ! mysqladmin -h"localhost" -P"3306" status; do
     sleep 1
-    echo "Waiting for MySQL to be ready..."
+    echo "waiting for MariaDB to start ..."
 done
 
-# MySQL commands to create a database and user for WordPress
-echo "CREATE DATABASE amentagdb;" > tmp/myfile.sql
-echo "CREATE USER 'root'@'%' IDENTIFIED BY 'amentag1234';" >> tmp/myfile.sql
-echo "CREATE USER 'amentag'@'%' IDENTIFIED BY '1234';" >> tmp/myfile.sql
-echo "GRANT ALL PRIVILEGES ON *.* TO 'amentag'@'%';" >> tmp/myfile.sql
-echo "FLUSH PRIVILEGES;" >> tmp/myfile.sql
+echo "CREATE DATABASE $DB_NAME;
+CREATE USER '$ROOT_NAME'@'%' IDENTIFIED BY '$ROOT_PASS';
+CREATE USER '$USER_NAME'@'%' IDENTIFIED BY '$USER_PASS';
+GRANT ALL PRIVILEGES ON *.* TO '$ROOT_NAME'@'%';
+GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$USER_NAME'@'%';
+FLUSH PRIVILEGES;" > $SQL_SCRIPT
 
-cat /tmp/myfile.sql
+mysql -u $ROOT_NAME < $SQL_SCRIPT
 
-mysql -u root < /tmp/myfile.sql
-
-mysqladmin -u root shutdown
+mysqladmin -u $ROOT_NAME shutdown
 
 # Run the MariaDB server in the foreground (this keeps the container running)
 mysqld_safe
