@@ -3,10 +3,15 @@
 # Start the MariaDB server
 mysqld_safe &
 
+apt install -y iputils-ping
+
 # Wait for MariaDB to start
-while ! mysqladmin -h"localhost" -P"3306" status; do
+RET=1
+until [ ${RET} -eq 0 ]; do
     sleep 1
     echo "waiting for MariaDB to start ..."
+    ping -c 1 mariadb;
+    RET=$?
 done
 
 echo "CREATE DATABASE $DB_NAME;

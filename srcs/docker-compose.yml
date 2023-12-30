@@ -2,7 +2,10 @@ version: '2.13.0'
 
 services:
   nginx:
-    build: requirements/nginx
+    build:
+      context: requirements/nginx
+      dockerfile: Dockerfile
+    image: nginx:amentag
     container_name: nginx
     ports:
       - "443:443"
@@ -11,13 +14,16 @@ services:
     depends_on:
       - wordpress
     networks:
-      - my-network
+      - amentag-network
     env_file:
       - .env
     restart: on-failure
 
   wordpress:
-    build: requirements/wordpress
+    build:
+      context: requirements/wordpress
+      dockerfile: Dockerfile
+    image: wordpress:amentag
     container_name: wordpress
     env_file:
       - .env
@@ -26,32 +32,35 @@ services:
     depends_on:
       - mariadb
     networks:
-      - my-network
+      - amentag-network
     restart: on-failure
 
   mariadb:
-    build: requirements/mariadb
+    build:
+      context: requirements/mariadb
+      dockerfile: Dockerfile
+    image: mariadb:amentag
     container_name: mariadb
     env_file:
       - .env
-    # volumes:
-      # - db-volume:/var/lib/mysql
+    volumes:
+      - db-volume:/var/lib/mysql
     networks:
-      - my-network
+      - amentag-network
     restart: on-failure
 
 volumes:
   wp-volume:
     driver_opts:
-      device: /Users/amentag/wordpress
+      device: /home/amentag/data/wordpress
       type: none
       o: bind
   db-volume:
     driver_opts:
-      device: /Users/amentag/mariadb
+      device: /home/amentag/data/mariadb
       type: none
       o: bind
 
 networks:
-  my-network:
-    name: my-network
+  amentag-network:
+    name: amentag-network

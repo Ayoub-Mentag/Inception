@@ -8,7 +8,7 @@ RUN apt install -y php7.4-fpm\
 
 RUN mkdir -p /var/www/html
 RUN chmod 777 /var/www/html
-
+RUN chown -R www-data:www-data /var/www/html
 RUN mkdir -p /run/php/
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar

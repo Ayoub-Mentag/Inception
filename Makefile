@@ -1,9 +1,11 @@
+all : up
 
-build:
-	docker-compose -f ./srcs/docker-compose.yml up --build
+up : 
+	@mkdir -p /home/amentag/data/wordpress /home/amentag/data/mariadb
+	@docker-compose -f ./srcs/docker-compose.yml up --build
 
-fclean :
-	docker system prune -a
-	docker volume prune --force
-	rm -rf ~/wordpress/*
-	rm -rf ~/wordpress/*
+down : 
+	@docker-compose -f ./srcs/docker-compose.yml down
+
+status : 
+	@docker ps
