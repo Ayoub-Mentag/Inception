@@ -53,13 +53,9 @@ volumes:
   wp-volume:
     driver_opts:
       device: /home/amentag/data/wordpress
-      type: none
-      o: bind
   db-volume:
     driver_opts:
       device: /home/amentag/data/mariadb
-      type: none
-      o: bind
 
 networks:
   amentag-network:
